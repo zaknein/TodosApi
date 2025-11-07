@@ -10,11 +10,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 @CrossOrigin
 public class toDoController{
 
+    static ToDoItem toDoItem = new ToDoItem();
     @GetMapping("/health-check")
     public String getHealthCheck(){
         return "Heeell yeah all working up";
     }
 
-
+    @GetMapping("/todos")
+    public TodoItem getToDoItem(){
+        return toDoItem;
+    }
 
 }
