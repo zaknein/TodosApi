@@ -21,4 +21,9 @@ public class toDoController{
         return toDoItem;
     }
 
+    @GetMapping("/todos/{id}")
+    public int getId(@PathVariable String id){
+        /* BUILDING IN PROGRESS */
+    }
+
 }
