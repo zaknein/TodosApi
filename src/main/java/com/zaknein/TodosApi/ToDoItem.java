@@ -1,6 +1,6 @@
 package com.zaknein.TodosApi;
 
-public class toDoItem {
+public class ToDoItem {
     int id;
     String  title;
     String description;
