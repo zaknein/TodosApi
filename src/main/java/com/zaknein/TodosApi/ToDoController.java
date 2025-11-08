@@ -1,29 +1,50 @@
 package com.zaknein.TodosApi;
 
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
 @CrossOrigin
 public class ToDoController{
 
-    static ToDoItem toDoItem = new ToDoItem();
+    private final ToDoService toDoService;
+
+    @Autowired
+    public ToDoController(ToDoService toDoService){
+        this.toDoService = toDoService;
+    }
+   
+    /* GET METHODS */
+    
     @GetMapping("/health-check")
     public String getHealthCheck(){
         return "Heeell yeah all working up";
     }
 
     @GetMapping("/todos")
-    public TodoItem getToDoItem(){
-        return toDoItem;
+    public Map<Integer, ToDoItem> getAllToDos() {
+        return toDoService.findAll();
     }
 
     @GetMapping("/todos/{id}")
-    public int getId(@PathVariable String id){
-        /* BUILDING IN PROGRESS */
+    public ToDoItem getToDoById(@PathVariable int id) { 
+        return toDoService.findById(id); 
     }
+
+    /* POST METHODS */
+
+    @PostMapping("/todos")
+    public ToDoItem createNewDoItem(@RequestBody TodoRequest request){
+        return toDoService.createToDo(request);
+    }
+
 
 }

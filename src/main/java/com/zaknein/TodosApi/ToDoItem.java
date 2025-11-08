@@ -5,10 +5,10 @@ public class ToDoItem {
     String  title;
     String description;
 
-    public toDoItem() { }
+    public ToDoItem() { }
 
-    public toDoItem(String title, String description){
-        this.id = nextId++;
+    public ToDoItem(int id, String title, String description){
+        this.id = id;
         this.title = title;
         this.description = description;
     }
