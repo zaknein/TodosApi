@@ -33,4 +33,12 @@ public class ToDoService {
         return toDoMap.get(id); 
     }
 
+    public ToDoItem updateToDo(int id, TodoRequest request){
+        ToDoItem oldToDo = toDoMap.get(id);
+
+        oldToDo.setTitle(request.getTitle());
+        oldToDo.setDescription(request.getDescription());
+
+        return oldToDo;
+    }
 }

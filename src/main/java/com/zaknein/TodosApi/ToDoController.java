@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -46,5 +47,9 @@ public class ToDoController{
         return toDoService.createToDo(request);
     }
 
-
+    @PutMapping("/todos/{id}")
+    public ToDoItem updateToDo(@PathVariable int id, @RequestBody TodoRequest request){        
+        ToDoItem newToDo = toDoService.updateToDo(id, request);
+        return newToDo; 
+    }
 }
