@@ -1,9 +1,12 @@
 package com.zaknein.TodosApi;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +34,7 @@ public class ToDoController{
     }
 
     @GetMapping("/todos")
-    public Map<Integer, ToDoItem> getAllToDos() {
+    public List<ToDoItem>  getAllToDos() {
         return toDoService.findAll();
     }
 
@@ -51,5 +54,10 @@ public class ToDoController{
     public ToDoItem updateToDo(@PathVariable int id, @RequestBody TodoRequest request){        
         ToDoItem newToDo = toDoService.updateToDo(id, request);
         return newToDo; 
+    }
+
+    @DeleteMapping("/todos/{id}")
+    public void deleteToDoById(@PathVariable int id){
+        toDoService.deleteToDoById(id);
     }
 }

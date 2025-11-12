@@ -5,7 +5,11 @@ package com.zaknein.TodosApi;
 
 // import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -25,8 +29,8 @@ public class ToDoService {
         return newToDo;
     }
 
-    public Map<Integer, ToDoItem> findAll() {
-        return (Map<Integer, ToDoItem>) toDoMap;
+    public List<ToDoItem> findAll() {
+        return new ArrayList<>(toDoMap.values());
     }
 
     public ToDoItem findById(int id) {
@@ -40,5 +44,9 @@ public class ToDoService {
         oldToDo.setDescription(request.getDescription());
 
         return oldToDo;
+    }
+
+    public void deleteToDoById(int id){
+        toDoMap.remove(id);
     }
 }
