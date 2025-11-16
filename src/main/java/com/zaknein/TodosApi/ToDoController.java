@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin
 public class ToDoController{
 
-    private final ToDoService toDoService;
+    private final ToDoRepositoryImpl toDoService;
 
     @Autowired
-    public ToDoController(ToDoService toDoService){
+    public ToDoController(ToDoRepositoryImpl toDoService){
         this.toDoService = toDoService;
     }
    
