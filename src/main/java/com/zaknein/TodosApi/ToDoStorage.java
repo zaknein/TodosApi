@@ -20,13 +20,13 @@ public class ToDoStorage implements ToDoRepository {
 
     private static final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-    private HashMap<Integer,ToDoItem> ToDoMap = new HashMap<>();
+    private HashMap<Integer,ToDoItem> toDoMap = new HashMap<>();
 
     public ToDoStorage() throws IOException {
         if (todoFile.exists()) {
-            ToDoMap = mapper.readValue(todoFile, mapper.getTypeFactory().constructMapLikeType(HashMap.class, Integer.class, ToDoItem.class));
+            toDoMap = mapper.readValue(todoFile, mapper.getTypeFactory().constructMapLikeType(HashMap.class, Integer.class, ToDoItem.class));
         } else {
-            ToDoMap = new HashMap<>();
+            toDoMap = new HashMap<>();
         }
     }
 
@@ -60,15 +60,15 @@ public class ToDoStorage implements ToDoRepository {
     public ToDoItem createToDo(TodoRequest request) {
         int newId = nextToDoId++;
         ToDoItem newToDo = new ToDoItem(newId, request.getTitle(), request.getDescription());
-        ToDoMap.put(newId, newToDo);
+        toDoMap.put(newId, newToDo);
         sync();
         return null;
     }
 
     @Override
     public void deleteToDoById(int id) {
-        // TODO Auto-generated method stub
-        
+        toDoMap.remove(id);
+        sync();        
     }
 
     @Override
@@ -92,7 +92,7 @@ public class ToDoStorage implements ToDoRepository {
 
     public void sync(){
         try {
-            mapper.writeValue(todoFile, ToDoMap);
+            mapper.writeValue(todoFile, toDoMap);
         } catch (IOException e) {
             System.out.println("No existe archivo");
             e.printStackTrace();
