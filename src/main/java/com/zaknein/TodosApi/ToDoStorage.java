@@ -10,11 +10,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 
 
 
-
+@Service
 public class ToDoStorage implements ToDoRepository {
      private static final File todoFile = new File("todos.json");
 
@@ -34,28 +37,6 @@ public class ToDoStorage implements ToDoRepository {
 
     /*--------------------------------------------------------------------------------- */
 
-    public void add(Expense expense) {
-
-    }
-
-    public List<Expense> list() {
-        return new ArrayList(expenses.values());
-    }
-
-    public void delete(int id) {
-        expenses.remove(id);
-        save();
-    }
-    public Expense get(int id){
-        return expenses.get(id);
-    }
-    public void update(int id, Expense expense){
-        expenses.replace(id, expense);
-        save();
-    }
-
-
-
     @Override
     public ToDoItem createToDo(TodoRequest request) {
         int newId = nextToDoId++;
@@ -73,20 +54,23 @@ public class ToDoStorage implements ToDoRepository {
 
     @Override
     public List<ToDoItem> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+        
+        return new ArrayList(toDoMap.values());
     }
 
     @Override
     public ToDoItem findById(int id) {
-        // TODO Auto-generated method stub
-        return null;
+        return toDoMap.get(id); 
     }
-
     @Override
     public ToDoItem updateToDo(int id, TodoRequest request) {
-        // TODO Auto-generated method stub
-        return null;
+
+        ToDoItem ancientToDo = toDoMap.get(id);
+
+        ancientToDo.setTitle(request.getTitle());
+        ancientToDo.setDescription(request.getDescription());
+
+        return ancientToDo;
     }
 
 

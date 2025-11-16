@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin
 public class ToDoController{
 
-    private final ToDoRepositoryImpl toDoService;
+    private final ToDoStorage toDoStorage;
 
     @Autowired
-    public ToDoController(ToDoRepositoryImpl toDoService){
-        this.toDoService = toDoService;
+    public ToDoController(ToDoStorage toDoStorage){
+        this.toDoStorage = toDoStorage;
     }
    
     /* GET METHODS */
@@ -35,29 +35,29 @@ public class ToDoController{
 
     @GetMapping("/todos")
     public List<ToDoItem>  getAllToDos() {
-        return toDoService.findAll();
+        return toDoStorage.findAll();
     }
 
     @GetMapping("/todos/{id}")
     public ToDoItem getToDoById(@PathVariable int id) { 
-        return toDoService.findById(id); 
+        return toDoStorage.findById(id); 
     }
 
     /* POST METHODS */
 
     @PostMapping("/todos")
     public ToDoItem createNewDoItem(@RequestBody TodoRequest request){
-        return toDoService.createToDo(request);
+        return toDoStorage.createToDo(request);
     }
 
     @PutMapping("/todos/{id}")
     public ToDoItem updateToDo(@PathVariable int id, @RequestBody TodoRequest request){        
-        ToDoItem newToDo = toDoService.updateToDo(id, request);
+        ToDoItem newToDo = toDoStorage.updateToDo(id, request);
         return newToDo; 
     }
 
     @DeleteMapping("/todos/{id}")
     public void deleteToDoById(@PathVariable int id){
-        toDoService.deleteToDoById(id);
+        toDoStorage.deleteToDoById(id);
     }
 }
