@@ -1,8 +1,6 @@
 package com.zaknein.TodosApi;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin
 public class ToDoController{
 
-    private final ToDoStorage toDoStorage;
+    private final ToDoRepositoryImpl toDoStorage;
 
     @Autowired
-    public ToDoController(ToDoStorage toDoStorage){
+    public ToDoController(ToDoRepositoryImpl toDoStorage){
         this.toDoStorage = toDoStorage;
     }
    

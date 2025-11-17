@@ -1,52 +1,83 @@
 package com.zaknein.TodosApi;
 
-// import com.zaknein.TodosApi.ToDoItem;
-// import com.zaknein.TodosApi.TodoRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-// import org.springframework.scheduling.config.Task;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-// @Service
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+
+
+
+@Service
 public class ToDoRepositoryImpl implements ToDoRepository {
-    
-    private final Map<Integer, ToDoItem> toDoMap = new HashMap<>();
+     private static final File todoFile = new File("todos.json");
+
+    private static final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+    private HashMap<Integer,ToDoItem> toDoMap = new HashMap<>();
+
+    public ToDoRepositoryImpl() throws IOException {
+        if (todoFile.exists()) {
+            toDoMap = mapper.readValue(todoFile, mapper.getTypeFactory().constructMapLikeType(HashMap.class, Integer.class, ToDoItem.class));
+        } else {
+            toDoMap = new HashMap<>();
+        }
+    }
 
     private int nextToDoId = 1;
 
-    public ToDoItem createToDo(TodoRequest request){
+    /*--------------------------------------------------------------------------------- */
+
+    @Override
+    public ToDoItem createToDo(TodoRequest request) {
         int newId = nextToDoId++;
-
         ToDoItem newToDo = new ToDoItem(newId, request.getTitle(), request.getDescription());
-
         toDoMap.put(newId, newToDo);
-
-        return newToDo;
+        sync();
+        return null;
     }
 
+    @Override
+    public void deleteToDoById(int id) {
+        toDoMap.remove(id);
+        sync();        
+    }
+
+    @Override
     public List<ToDoItem> findAll() {
-        return new ArrayList<>(toDoMap.values());
+        
+        return new ArrayList(toDoMap.values());
     }
 
+    @Override
     public ToDoItem findById(int id) {
         return toDoMap.get(id); 
     }
+    @Override
+    public ToDoItem updateToDo(int id, TodoRequest request) {
 
-    public ToDoItem updateToDo(int id, TodoRequest request){
-        ToDoItem oldToDo = toDoMap.get(id);
+        ToDoItem ancientToDo = toDoMap.get(id);
 
-        oldToDo.setTitle(request.getTitle());
-        oldToDo.setDescription(request.getDescription());
+        ancientToDo.setTitle(request.getTitle());
+        ancientToDo.setDescription(request.getDescription());
 
-        return oldToDo;
+        return ancientToDo;
     }
 
-    public void deleteToDoById(int id){
-        toDoMap.remove(id);
+
+    public void sync(){
+        try {
+            mapper.writeValue(todoFile, toDoMap);
+        } catch (IOException e) {
+            System.out.println("No existe archivo");
+            e.printStackTrace();
+        }
     }
 }
